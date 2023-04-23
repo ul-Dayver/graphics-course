@@ -26,36 +26,55 @@ function draw() {
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
 
-  rect(ctx);
+  // rect(ctx);
   // face(ctx);
-  
+  // barcode(ctx);
+
+  // ctx.fill(new Path2D("M100 100 h 200 v 80 h -200 Z"))
+
   // ctx.fillStyle = 'red'
-  // ctx.fill(drawRoundedRect(400, 400, 100, 100, 5));
-  
+  ctx.fillStyle = getGradient(ctx);
+  ctx.fill(drawRoundedRect(150, 200, 300, 300, 5));
+
   // ctx.strokeStyle = 'rgb(55, 90, 33)'
   // ctx.scale(2, 2); // растяжение по ширине в 1.5 раза и сжатие по высоте в 1.3 раза
   // ctx.translate(100, 50); // смещение на 100 пикселей вправо и 50px вниз
   // ctx.stroke(quadraticCurve());
-  
 
   // ctx.fillStyle = getGradient(ctx)
   // ctx.scale(2, 2); // растяжение по ширине в 1.5 раза и сжатие по высоте в 1.3 раза
   // ctx.fill(bezierCurve());
-  
+
+  // ctx.font = "48px serif";
+  // const text = "Привет!"
+  // const textMeasure = ctx.measureText(text);
+  // ctx.strokeRect(400, 400, textMeasure.width, -48);
+
+  // // ctx.textAlign = "right";
+  // ctx.fillText(text, 400, 400, 400)
 }
 
 function getGradient(ctx) {
-  const cg = ctx.createLinearGradient(0, 0, 0, 100);
-  // Вверху начинаем с голубого неба.
-  cg.addColorStop(0, '#00BFFF');
-  // В середине градиента голубой блекнет до белого.
-  cg.addColorStop(0.5, 'white');
-  // Верхняя часть травы окрашена в зеленый.
-  cg.addColorStop(0.5, '#55dd00');
-  // В нижней части градиента трава блекнет до белого.
-  cg.addColorStop(1, 'white');
+  const point1 = { x: 100, y: 200 };
+  const point2 = { x: 700, y: 200 };
+  ctx.fillStyle = 'black'
+  ctx.beginPath();
+  ctx.moveTo(point1.x, point1.y);
+  ctx.lineTo(point2.x, point2.y);
+  ctx.stroke();
+  ctx.closePath();
 
-  return cg
+  const cg = ctx.createLinearGradient(point1.x, point1.y, point2.x, point2.y);
+  // Вверху начинаем с голубого неба.
+  cg.addColorStop(0, "#00BFFF");
+  // В середине градиента голубой блекнет до белого.
+  // cg.addColorStop(0.3, 'white');
+  // Верхняя часть травы окрашена в зеленый.
+  cg.addColorStop(1, "#55dd00");
+  // В нижней части градиента трава блекнет до белого.
+  // cg.addColorStop(1, 'white');
+
+  return cg;
 }
 
 function rect(ctx) {
@@ -94,25 +113,25 @@ function face(ctx) {
 }
 
 function barcode(ctx) {
-  for (let i = 0; i < 10; i++){
-    ctx.lineWidth = 1+i;
+  for (let i = 0; i < 10; i++) {
+    ctx.lineWidth = 1 + i;
     ctx.beginPath();
-    ctx.moveTo(5+i*14,5);
-    ctx.lineTo(5+i*14,140);
+    ctx.moveTo(400 + i * 14, 400);
+    ctx.lineTo(400 + i * 14, 540);
     ctx.stroke();
   }
 }
 
 function drawRoundedRect(x, y, w, h, cr) {
   const _cr = Math.PI * cr;
-  
+
   const ctx = new Path2D();
   ctx.moveTo(x + w / 2, y);
   ctx.arcTo(x + w, y, x + w, y + h, _cr);
   ctx.arcTo(x + w, y + h, x, y + h, _cr);
   ctx.arcTo(x, y + h, x, y, _cr);
   ctx.arcTo(x, y, x + w, y, _cr);
-  
+
   return ctx;
 }
 
@@ -125,7 +144,7 @@ function quadraticCurve() {
   ctx.quadraticCurveTo(60, 120, 65, 100);
   ctx.quadraticCurveTo(125, 100, 125, 62.5);
   ctx.quadraticCurveTo(125, 25, 75, 25);
-  return ctx
+  return ctx;
 }
 
 function bezierCurve() {
@@ -137,8 +156,8 @@ function bezierCurve() {
   ctx.bezierCurveTo(110, 102, 130, 80, 130, 62.5);
   ctx.bezierCurveTo(130, 62.5, 130, 25, 100, 25);
   ctx.bezierCurveTo(85, 25, 75, 37, 75, 40);
-  
-  return ctx
+
+  return ctx;
 }
 
 draw();
