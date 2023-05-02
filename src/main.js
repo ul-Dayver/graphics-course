@@ -25,21 +25,23 @@ function grid() {
 function draw() {
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
-
+ 
   // rect(ctx);
+  // triangle(ctx);
   // face(ctx);
+  // hook(ctx);
   // barcode(ctx);
 
   // ctx.fill(new Path2D("M100 100 h 200 v 80 h -200 Z"))
 
   // ctx.fillStyle = 'red'
-  ctx.fillStyle = getGradient(ctx);
-  ctx.fill(drawRoundedRect(150, 200, 300, 300, 5));
+  // ctx.fillStyle = getGradient(ctx);
+  // ctx.fill(drawRoundedRect(150, 200, 300, 300, 5));
 
   // ctx.strokeStyle = 'rgb(55, 90, 33)'
   // ctx.scale(2, 2); // растяжение по ширине в 1.5 раза и сжатие по высоте в 1.3 раза
   // ctx.translate(100, 50); // смещение на 100 пикселей вправо и 50px вниз
-  // ctx.stroke(quadraticCurve());
+  //  ctx.stroke(quadraticCurve());
 
   // ctx.fillStyle = getGradient(ctx)
   // ctx.scale(2, 2); // растяжение по ширине в 1.5 раза и сжатие по высоте в 1.3 раза
@@ -52,7 +54,12 @@ function draw() {
 
   // // ctx.textAlign = "right";
   // ctx.fillText(text, 400, 400, 400)
+
+  shadow(ctx)
+
+  // ctx.setLineDash([10, 20]);
 }
+
 
 function getGradient(ctx) {
   const point1 = { x: 100, y: 200 };
@@ -100,6 +107,17 @@ function rect(ctx) {
   ctx.clearRect(15, 15, 40, 40);
 }
 
+function triangle(ctx) {
+  ctx.beginPath();
+  ctx.moveTo(500, 100);
+  ctx.lineTo(700, 400);
+  ctx.lineTo(200, 400);
+  ctx.lineTo(500, 100);
+  ctx.stroke();
+  // ctx.fill();
+  ctx.closePath();
+}
+
 function face(ctx) {
   ctx.beginPath();
   ctx.arc(100, 180, 50, 0, Math.PI * 2, true); // Внешняя окружность
@@ -110,6 +128,29 @@ function face(ctx) {
   ctx.moveTo(125, 165);
   ctx.arc(120, 165, 5, 0, Math.PI * 2, true); // Правый глаз
   ctx.stroke();
+}
+
+function hook (ctx) {
+  target(ctx, 300, 300);
+  target(ctx, 500, 350);
+  target(ctx, 350, 550);
+
+  ctx.beginPath();
+  ctx.moveTo(300, 300);
+  ctx.arcTo(500, 350, 350, 550, Math.PI * 15);
+  ctx.stroke();
+  ctx.closePath();
+}
+
+function target(ctx, x, y) {
+  ctx.beginPath();
+  ctx.moveTo(x, y - 50);
+  ctx.lineTo(x, y + 50);
+  ctx.stroke();
+  ctx.moveTo(x - 50, y);
+  ctx.lineTo(x + 50, y);
+  ctx.stroke();
+  ctx.closePath();
 }
 
 function barcode(ctx) {
@@ -158,6 +199,17 @@ function bezierCurve() {
   ctx.bezierCurveTo(85, 25, 75, 37, 75, 40);
 
   return ctx;
+}
+
+function shadow(ctx) {
+  ctx.shadowOffsetX = 25;
+  ctx.shadowOffsetY = 25;
+  ctx.shadowBlur = 2;
+  ctx.shadowColor = "rgba(0, 0, 0, 0.75)";
+
+  ctx.font = "40px Times New Roman";
+  ctx.fillStyle = "Black";
+  ctx.fillText("Sample String", 400, 400);
 }
 
 draw();
