@@ -30,9 +30,11 @@ function draw() {
   // triangle(ctx);
   // face(ctx);
   // hook(ctx);
-  // barcode(ctx);
+  // ellipse(ctx);
 
   // ctx.fill(new Path2D("M100 100 h 200 v 80 h -200 Z"))
+
+  // barcode(ctx);
 
   // ctx.fillStyle = 'red'
   // ctx.fillStyle = getGradient(ctx);
@@ -55,7 +57,7 @@ function draw() {
   // // ctx.textAlign = "right";
   // ctx.fillText(text, 400, 400, 400)
 
-  shadow(ctx)
+  // shadow(ctx)
 
   // ctx.setLineDash([10, 20]);
 }
@@ -128,6 +130,14 @@ function face(ctx) {
   ctx.moveTo(125, 165);
   ctx.arc(120, 165, 5, 0, Math.PI * 2, true); // Правый глаз
   ctx.stroke();
+  ctx.closePath();
+}
+
+function ellipse(ctx) {
+  ctx.beginPath();
+  ctx.ellipse(400, 400, 100, 300, Math.PI / 2, 0, Math.PI * 2, true);
+  ctx.stroke();
+  ctx.closePath();
 }
 
 function hook (ctx) {
@@ -154,8 +164,11 @@ function target(ctx, x, y) {
 }
 
 function barcode(ctx) {
+  // ctx.setLineDash([3, 5]);
+
   for (let i = 0; i < 10; i++) {
     ctx.lineWidth = 1 + i;
+    // ctx.lineCap = "round"; // butt square
     ctx.beginPath();
     ctx.moveTo(400 + i * 14, 400);
     ctx.lineTo(400 + i * 14, 540);
@@ -210,6 +223,30 @@ function shadow(ctx) {
   ctx.font = "40px Times New Roman";
   ctx.fillStyle = "Black";
   ctx.fillText("Sample String", 400, 400);
+}
+
+function translate(ctx) {
+  for (var i = 0; i < 3; i++) {
+    for (var j = 0; j < 3; j++) {
+      ctx.save();
+      ctx.fillStyle = 'rgb(' + (51 * i) + ', ' + (255 - 51 * i) + ', 255)';
+      ctx.translate(10 + j * 50, 10 + i * 50);
+      ctx.fillRect(0, 0, 25, 25);
+      ctx.restore();
+    }
+  }
+}
+
+function rotate(ctx) {
+  ctx.save();
+  // blue rect
+  ctx.fillStyle = '#0095DD';
+  ctx.fillRect(30, 30, 100, 100);
+  ctx.rotate((Math.PI / 180) * 25);
+  // grey rect
+  ctx.fillStyle = '#4D4E53';
+  ctx.fillRect(30, 30, 100, 100);
+  ctx.restore();
 }
 
 draw();
