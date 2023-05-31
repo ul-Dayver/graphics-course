@@ -18,6 +18,8 @@ function loadImage(ctx, src) {
   img.src = src;
   img.onload = () => {
     ctx.drawImage(img, 0, 0);
+
+    // ctx.drawImage(img, 250, 100, 200, 300, 0, 0, 200, 300);
     // transformation(ctx, img);
   };
 }
@@ -81,7 +83,7 @@ function transformation(ctx, img) {
 
   // ctx.scale(0.5, 0.5);
 
-  // Rotate 45 degrees clockwise
+  // Повернуть на 45 градусов по часовой стрелке
   // ctx.rotate(Math.PI / 4);
 
   ctx.drawImage(img, 0, 0);
