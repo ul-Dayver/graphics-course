@@ -1,14 +1,17 @@
 import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 
 export function draw3d() {
   const canvas = document.getElementById("canvas");
   const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
+  const scene = new THREE.Scene();
 
   const width = window.innerWidth;
   const height = window.innerHeight;
   const aspectRatio = width / height;
 
-  const scene = new THREE.Scene();
   const fov = 75; // field of view - поле зрения 75 градусов по вертикали
   const near = 0.1;
   const far = 5;
@@ -25,6 +28,7 @@ export function draw3d() {
   });
   const mesh = new THREE.Mesh(geometry, material);
   // mesh.rotation.y = 0.5;
+
   scene.add(mesh);
 
   const light = new THREE.DirectionalLight(0xffffff, 3);
@@ -43,4 +47,65 @@ export function draw3d() {
     renderer.render(scene, camera);
     requestAnimationFrame(render);
   }
+}
+
+export function load3d(src, loader) {
+  loader.load(
+    src,
+    function (object) {
+      console.log(object);
+      const canvas = document.getElementById("canvas");
+      const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
+
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const aspectRatio = width / height;
+
+      const fov = 50; // field of view - поле зрения 75 градусов по вертикали
+      const near = 0.1;
+      const far = 100;
+      // Near и Far представляют пространство перед камерой, которое будет визуализировано.
+      // Все, что находится до этого диапазона или после него, будет обрезано
+
+      const camera = new THREE.PerspectiveCamera(fov, aspectRatio, near, far);
+      camera.position.z = 3.2;
+      camera.position.set(2.325, 4.535, 3.59);
+
+      const scene = new THREE.Scene();
+
+      let setSceneObj;
+
+      switch (true) {
+        case loader instanceof GLTFLoader:
+          setSceneObj = object.scene;
+          break;
+        case loader instanceof OBJLoader:
+        default:
+          setSceneObj = object;
+      }
+
+      scene.add(setSceneObj);
+
+      const light = new THREE.DirectionalLight(0xffffff, 10);
+      light.position.set(-1, 2, 4);
+      scene.add(light);
+
+      renderer.setSize(width, height);
+      const controls = new OrbitControls(camera, renderer.domElement);
+
+      controls.update();
+      render();
+
+      function render() {
+        requestAnimationFrame(render);
+        controls.update();
+
+        renderer.render(scene, camera);
+      }
+    },
+    undefined,
+    function (error) {
+      console.error(error);
+    }
+  );
 }
