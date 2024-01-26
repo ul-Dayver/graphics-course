@@ -35,17 +35,48 @@ export function draw3d() {
   light.position.set(-1, 2, 4);
   scene.add(light);
 
+  const rayCaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+
   renderer.setSize(width, height);
 
+  let selectedMesh = null;
   render();
 
   function render(time) {
+    rayCaster.setFromCamera(pointer, camera);
+    const intersects = rayCaster.intersectObjects(scene.children, false);
+
+    if (intersects.length > 0) {
+      if (selectedMesh)
+        selectedMesh.material.emissive.setHex(selectedMesh.currentHex);
+
+      selectedMesh = intersects[0].object;
+      selectedMesh.currentHex = selectedMesh.material.emissive.getHex();
+      selectedMesh.material.emissive.setHex(0xff0000);
+    } else {
+      if (selectedMesh)
+        selectedMesh.material.emissive.setHex(selectedMesh.currentHex);
+      selectedMesh = null;
+    }
     // mesh.rotation.z = time * 0.001;
     mesh.rotation.x = time * 0.001;
     mesh.rotation.y = time * 0.001;
 
     renderer.render(scene, camera);
     requestAnimationFrame(render);
+  }
+
+  window.addEventListener("pointermove", onPointerMove);
+
+  function onPointerMove(event) {
+    // calculate pointer position in normalized device coordinates
+    // (-1 to +1) for both components
+
+    pointer.set(
+      (event.clientX / window.innerWidth) * 2 - 1,
+      -(event.clientY / window.innerHeight) * 2 + 1
+    );
   }
 }
 
